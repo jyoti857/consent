@@ -7,7 +7,10 @@ import { activateUser, findMovies } from '../../../../db/controller';
 const handler = nextConnect();
 handler.use(middlware)
 
-handler.get(findMovies(2))
+handler.get(activateUser)
+
+
+export default handler;
 
 // export default async function activateUser(req: any, res: any){
 //   const hash = req.query.hash;

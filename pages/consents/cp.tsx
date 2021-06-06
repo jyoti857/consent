@@ -217,3 +217,11 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
 }
  
 export default CommunicationPreferences;
+
+export const getStaticProps = async () => {
+  console.log("dksldkl")
+  const resp = await fetch("http://localhost:3000/api/movies")
+  const res = await resp.json()
+  console.log("sd-->", res)
+  return {props: {res}}
+}

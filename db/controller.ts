@@ -19,8 +19,10 @@ export const registerEmail = (email: string) => async(req: Document, res: any) =
 }
 
 // activate user
-export const activateUser = async(req: Document, res: any) => {
-  const hash = "60bd22565059373c1869156a"
+export const activateUser = async(req: any, res: any) => {
+  // const hash = "60bd22565059373c1869156a"
+  const hash = req.query.hash
+  console.log("query hash --->", hash)
   try{
     const data = await req.db.collection("pending_consent_user").findOne({_id: new ObjectId(hash)})
     // res.json(data)
