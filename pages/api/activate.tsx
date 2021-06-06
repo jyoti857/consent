@@ -1,7 +1,8 @@
 
 import nextConnect from 'next-connect'
 import middlware from '../../db/database'
-import { findMovies, findOneMovie,  activateUser, registerEmail, updateOneMovie } from '../../db/controller';
+
+import { activateUser, findMovies } from '../../db/controller';
 
 const handler = nextConnect();
 handler.use(middlware)
@@ -11,9 +12,5 @@ handler.use(middlware)
 // handler.get(findMovies(5))
 handler.get(activateUser)
 
-// handler.get(findOneMovie("Enclave_"))
-
-// handler.get(updateOneMovie)
-// handler.put(async(req: any, ))
 
 export default handler;

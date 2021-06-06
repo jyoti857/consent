@@ -28,7 +28,7 @@ export function sendConfirmationMail({toUser, hash}: any){
     html: `
       <h3> Hello ${toUser.email.toString().split("@")[0]} </h3>
       <p>Thank you for registering into our Application. Much Appreciated! Just one last step is laying ahead of you...</p>
-      <p>To activate your account please follow this link: <a target="_" href="${process.env.DOMAIN}/api/activate/user/${hash}">${hash}/activate </a></p>
+      <p>To activate your account please follow this link: <a target="_" href="http://localhost:3000/api/activate/user/${hash}">${hash}/activate </a></p>
       <p>Cheers</p>
       <p>Your Application Team</p>
     `

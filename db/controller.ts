@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { Document } from "mongoose";
 import { sendConfirmationMail } from "./mailer";
 
@@ -10,11 +11,26 @@ export const registerEmail = (email: string) => async(req: Document, res: any) =
   if(existsUser) {return res.status(422).send("user is already registered")}
 
   const newUser = await req.db.collection("pending_consent_user").insertOne({email});
-  await sendConfirmationMail({toUser: {email: "jyotiranjan857@gmail.com"}, hash: newUser.insertedId})
+  // console.log("new user --> ", newUser.ops[0])
+  const user = newUser.ops[0]
+  await sendConfirmationMail({toUser: user, hash: user._id})
   return res.json({message: "you have been registered"})
 
 }
 
+// activate user
+export const activateUser = async(req: Document, res: any) => {
+  const hash = "60bd22565059373c1869156a"
+  try{
+    const data = await req.db.collection("pending_consent_user").findOne({_id: new ObjectId(hash)})
+    // res.json(data)
+    await req.db.collection("consent_user").insertOne({...data, new: true})
+    await req.db.collection("pending_consent_user").remove({_id: new ObjectId(hash)})
+    res.json({message: `User ${hash} has been activated`})
+  }catch{
+    res.send("User cannot be activated!!")
+  }
+}
 
 // find first 5 docs
 export const findMovies = (limit: number) => async(req: Document, res: any) => {
