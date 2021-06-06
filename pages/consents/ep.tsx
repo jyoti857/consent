@@ -1,20 +1,32 @@
 import {  AppBar, makeStyles } from "@material-ui/core";
 import { CardMedia, Card, CardActions, CardContent, Button, Typography, TextField} from '@material-ui/core'
+import { InferGetStaticPropsType } from "next";
 import Image from 'next/image'
 import React from "react";
+import InputField from "../../componets/InputField";
 export interface EntryPageProps {
   
 }
 
-const EntryPage: React.FC<EntryPageProps> = () => {
+const EntryPage = (props?: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [email, setEmail] = React.useState("")
-  const handleChange = e => {
+  const [emailCheck, setEmailCheck] = React.useState(false)
+  console.log("email0---> ", email )
+  const handleChange = (e: any) => {
     e.preventDefault();
     setEmail(e.target.value)
+    if(email.indexOf("@") !== -1 && email.indexOf(".") !== -1){
+      console.log("inside if > ", email )
+      setEmailCheck(true)
+    }else {
+      console.log("inside else > ", email )
+      setEmailCheck(_ => false)
+    }
   }
+  console.log("(*** from res static props ---> ", props?.res)
   return (  
     <div> 
-      <AppBar>Consents</AppBar>
+      {/* <AppBar>Consents</AppBar> */}
       <Card style= {{width: 730, margin: '40px auto', position: 'relative', paddingBottom: 32,}}>
         <CardContent>
           <div style = {{display: 'flex'}}>
@@ -52,39 +64,33 @@ const EntryPage: React.FC<EntryPageProps> = () => {
             </div>
           </div>
         </CardContent>
-        {/* <TextField 
-          label={`Email ${true ? "*" : ""}`}
-          value={email}
+        <InputField 
+          placeholder='Enter email address'
+          value ={email}
           onChange={handleChange}
-          variant='outlined'
-        /> */}
-        <div style = {{display: 'flex', flexDirection: 'column', }}>
-          <label style = {{marginLeft: 21, marginBottom: 7}}>Email*</label>
-          <input 
-            type = 'text'
-            onChange={handleChange}
-            value={email}
-            placeholder='Enter email address'
-            style = {{
-              borderWidth: 1,
-              borderRadius: 3,
-              width: "94%",
-              height: 33,
-              lineHeight: 1.5, 
-              letterSpacing: 1.2,
-              outlineColor: 'grey',
-              fontFamily: "sans-serif",
-              fontSize: 16,
-              margin: "2px 20px",
-            }}
-          />
-        </div>
+          divStyle = {{display: 'flex', flexDirection: 'column', }}
+          labelStyle = {{marginLeft: 21, marginBottom: 7}}
+          label="Email*"
+          inputStyle={{
+            borderWidth: 1,
+            borderRadius: 3,
+            width: "94%",
+            height: 33,
+            // lineHeight: 1.5, 
+            // letterSpacing: 1.2,
+            outlineColor: 'grey',
+            fontFamily: "sans-serif",
+            fontSize: 16,
+            margin: "2px 20px",
+          }}
+        />
         
         <CardActions>
           <Button 
             size="small"
             variant='contained'
             color = 'inherit' 
+            disabled = {!emailCheck}
             style ={{
               // display: 'flex',
               // flexDirection: 'row-reverse',
@@ -93,7 +99,11 @@ const EntryPage: React.FC<EntryPageProps> = () => {
               position: 'absolute',
               bottom: 10,
               right: 10,
-              backgroundColor: '#00A7E1'
+              color: 'white',
+              backgroundColor: emailCheck ?'#00A7E1' : '#c2c2c2',
+              cursor: 'pointer',
+              textTransform: "capitalize",
+              fontFamily: "sans-serif"
           }}>Submit</Button>
         </CardActions>
       </Card>
@@ -102,3 +112,12 @@ const EntryPage: React.FC<EntryPageProps> = () => {
 }
  
 export default EntryPage;
+
+
+export const getStaticProps = async () => {
+  console.log("dksldkl")
+  const resp = await fetch("http://localhost:3000/api/movies")
+  const res = await resp.json()
+  console.log("sd-->", res)
+  return {props: {res}}
+}

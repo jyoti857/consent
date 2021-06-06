@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import EntryPage from './consents/entryPage'
+import EntryPage from './consents/ep'
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <EntryPage />
+        <EntryPage res={{message: "not used for this page, will be removed"}} />
       </main>
 
       <footer className={styles.footer}>
@@ -25,7 +25,7 @@ export default function Home() {
         >
           Powered by{' '}
           <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+            <Image src="/adct_logo_small.png" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
