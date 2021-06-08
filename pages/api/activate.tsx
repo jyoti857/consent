@@ -10,7 +10,8 @@ handler.use(middlware)
 // handler.post(registerEmail("jyotiranjan857@gmail.com"))
 
 // handler.get(findMovies(5))
-handler.get(activateUser)
+// handler.get(activateUser)
+handler.post(activateUser)
 
 
 export default handler;

@@ -7,11 +7,12 @@ export interface InputFieldProps {
   divStyle?: any;
   labelStyle?: any;
   label?: any;
-  inputStyle?: any
+  inputStyle?: any;
+  disabled?: boolean
 }
  
 const InputField: React.FC<InputFieldProps> = ({onChange, value, placeholder, divStyle, 
-  labelStyle, label, inputStyle
+  labelStyle, label, inputStyle, disabled
 }) => {
   return ( 
     <div style = {divStyle}>
@@ -21,6 +22,7 @@ const InputField: React.FC<InputFieldProps> = ({onChange, value, placeholder, di
         onChange={onChange}
         value={value}
         placeholder={placeholder}
+        disabled={disabled}
         style = {{...inputStyle, 
           borderWidth: 1,
           borderRadius: 3,

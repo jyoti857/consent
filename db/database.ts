@@ -1,5 +1,5 @@
-import { MongoClient} from 'mongodb'
-
+import { Db, MongoClient} from 'mongodb'
+// import { Db } from 'mongoose'
 import nextConnect from 'next-connect'
 
 const uri = "mongodb+srv://jyoti1:jyoti123@cluster0.0tmqu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -21,3 +21,12 @@ const middleware = nextConnect();
 middleware.use(database)
 
 export default database;
+
+////==== for instant work around, will be deleted 
+export const dbConnect = async() => {
+  console.log("from database file")
+  if(!client.isConnected()) await client.connect();
+  const dbClient = client;
+  return dbClient.db('sample_mflix')
+  //.collection("pending_consent_user")
+}

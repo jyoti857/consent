@@ -8,15 +8,37 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import InputField from "../../componets/InputField";
-import nextConnect from 'next-connect';
-import database from '../../db/database';
-import {Document} from 'mongoose'
+import {dbConnect} from '../../db/database';
+import { Db, ObjectId } from 'mongodb';
+import React from 'react';
 
 export interface CommunicationPreferencesProps {
   
 }
-const initialValues = {email: ""}
-const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => {
+let initialValues = {email: "enter your email", firstName: "John", lastName: "Doe", state: 'DE'}
+const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({token, new_user}: any) => {
+  console.log("token --> ", token )
+  const {email, name, state}=token
+  const [firstName, lastName] = name.split(" ")
+
+  const [firstName_, setFirstName_] = React.useState(firstName)
+  const [lastName_, setLastName_] = React.useState(lastName)
+  const [state_, setState_] = React.useState(state)
+  const handleFormSubmit = async(e: any) => {
+    e.preventDefault();
+    const data = {firstName: firstName_, lastName: lastName_, state: state_ || initialValues.state}
+    console.log("data --> ", data)
+    await fetch(`http://localhost:3000/api/activate/user/${token._id}`, 
+      {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }
+    )
+  }
   return (  
     <div>
        <Card style= {{width: 730, margin: '40px auto', position: 'relative', paddingBottom: 32,}}>
@@ -59,10 +81,12 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
           <Grid item md={6} >
             <InputField
               placeholder='first name'
-              // value ={initialValues.email}
+              value ={firstName_ || initialValues.firstName}
+              onChange = {e => setFirstName_(e.target.value)}
               divStyle = {{display: 'flex', flexDirection: 'column', }}
               labelStyle = {{marginLeft: 21, marginBottom: 7}}
               label="Name*"
+              disabled={!new_user}
               inputStyle={{
                 borderWidth: 1,
                 borderRadius: 3,
@@ -80,10 +104,12 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
           <Grid item md={6}>
             <InputField
               placeholder='last name'
-              // value ={initialValues.email}
+              value ={lastName_}
+              onChange = {e => setLastName_(e.target.value)}
               divStyle = {{display: 'flex', flexDirection: 'column', }}
               labelStyle = {{marginLeft: 21, marginBottom: 7}}
               label= "*"
+              disabled={!new_user}
               inputStyle={{
                 borderWidth: 1,
                 borderRadius: 3,
@@ -101,10 +127,12 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
           <Grid item md={6} >
             <InputField
               placeholder='Delaware'
-              // value ={initialValues.email}
+              value ={state_ || initialValues.state}
+              onChange = {e => setState_(e.target.value)}
               divStyle = {{display: 'flex', flexDirection: 'column', }}
               labelStyle = {{marginLeft: 21, marginBottom: 7}}
               label="State*"
+              disabled={!new_user}
               inputStyle={{
                 borderWidth: 1,
                 borderRadius: 3,
@@ -121,7 +149,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
           </Grid>
           <Grid item md={6}>
             <InputField
-              placeholder='Pharmacist'
+              placeholder='Other'
               // value ={initialValues.email}
               divStyle = {{display: 'flex', flexDirection: 'column', }}
               labelStyle = {{marginLeft: 21, marginBottom: 7}}
@@ -143,10 +171,11 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
           <Grid item md={12}>
             <InputField
               placeholder='Enter email address'
-              // value ={initialValues.email}
+              value ={email||initialValues.email}
               divStyle = {{display: 'flex', flexDirection: 'column', }}
               labelStyle = {{marginLeft: 21, marginBottom: 7}}
               label="Email*"
+              disabled={true}
               inputStyle={{
                 borderWidth: 1,
                 borderRadius: 3,
@@ -199,6 +228,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
             variant='contained'
             color = 'inherit' 
             disabled = {!true}
+            onClick={handleFormSubmit}
             style ={{
               // display: 'flex',
               // flexDirection: 'row-reverse',
@@ -222,15 +252,34 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
 export default CommunicationPreferences;
 
 export const getServerSideProps = async (ctx: any) => {
-  // console.log("dksldkl", ctx)
+  console.log("dksldkl", ctx.query)
+  const id = ctx.query.token
   // const resp = await fetch(`http://localhost:3000/api/activate/user/${ctx.hash}`)
   // const res = await resp.json()
   // console.log("sd-->", res)
-  const handler = nextConnect()
-  handler.use(database)
-  handler.get(async(req:Document, res) => {
-    const user =  await req.db.collection("pending_consent_user").find().sort({_id: -1}).limit(1)
-    console.log("s--> ", user)
-  })
-  return {props: {res: "sd"}}
+
+  const d = await (await dbConnect()).collection('pending_consent_user').findOne({_id: new ObjectId(ctx.query.token)})
+  console.log("d --->", d)
+  const stringi = JSON.stringify(d)
+  const parse = JSON.parse(stringi)
+  if(parse && parse._id){
+    const existing_user = await (await dbConnect()).collection('consent_user').findOne({_id: new ObjectId(parse._id)})
+    console.log("stringi, parse ---> ", stringi, parse, existing_user)
+    // if(!existing_user || id ){
+    //   const stringi = JSON.stringify(existing_user)
+    //   const parse = JSON.parse(stringi)
+    //   console.log("parse_existing user inside  --->", parse)
+    // }
+    return {props:{token: {...parse}, new_user: true}}
+  }
+  const existing_user = await (await dbConnect()).collection('consent_user').findOne({_id: new ObjectId(ctx.query.token)})
+  if(existing_user){
+    const stringi = JSON.stringify(existing_user)
+    const parse = JSON.parse(stringi)
+    console.log("parse_existing user #--->", parse)
+    return {props:{token: {...parse}, new_user: false}}
+  }
+
+  // calling the activate user api 
+  return {props: {token: parse? parse: {}, new_user: false}}
 }

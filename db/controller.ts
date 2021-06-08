@@ -22,11 +22,19 @@ export const registerEmail = async(req: any, res: any) => {
 export const activateUser = async(req: any, res: any) => {
   // const hash = "60bd22565059373c1869156a"
   const hash = req.query.hash
-  console.log("query hash --->", hash)
+  const {firstName, lastName, state} = req.body
+  console.log("query hash from activateuser api --->", hash, firstName, lastName, state)
   try{
     const data = await req.db.collection("pending_consent_user").findOne({_id: new ObjectId(hash)})
     // res.json(data)
-    await req.db.collection("consent_user").insertOne({...data, new: true})
+    console.log("data from activate user ---> ", data)
+    await req.db.collection("consent_user").insertOne(
+      // {_id: new ObjectId(hash)},
+      {...data, name: `${firstName} ${lastName}`, state}, 
+      // {upsert: true}
+    )
+    
+    // just for testing purpose, commented below line 
     await req.db.collection("pending_consent_user").remove({_id: new ObjectId(hash)})
     res.json({message: `User ${hash} has been activated`, data: hash})
   }catch{
