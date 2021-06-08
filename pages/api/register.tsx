@@ -7,5 +7,8 @@ const handler = nextConnect();
 handler.use(middlware)
 
 
-handler.post(registerEmail("jyotiranjan857@gmail.com"))
+// handler.post(registerEmail("jyotiranjan857@gmail.com"))
+
+handler.post(registerEmail)
+
 export default handler;

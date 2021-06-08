@@ -7,7 +7,8 @@ import { activateUser, findMovies } from '../../../../db/controller';
 const handler = nextConnect();
 handler.use(middlware)
 
-handler.get(activateUser)
+const res = handler.get(activateUser)
+console.log(res.toString())
 
 
 export default handler;

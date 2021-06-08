@@ -8,6 +8,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import InputField from "../../componets/InputField";
+import nextConnect from 'next-connect';
+import database from '../../db/database';
+import {Document} from 'mongoose'
 
 export interface CommunicationPreferencesProps {
   
@@ -218,10 +221,16 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = () => 
  
 export default CommunicationPreferences;
 
-export const getStaticProps = async () => {
-  console.log("dksldkl")
-  const resp = await fetch("http://localhost:3000/api/movies")
-  const res = await resp.json()
-  console.log("sd-->", res)
-  return {props: {res}}
+export const getServerSideProps = async (ctx: any) => {
+  // console.log("dksldkl", ctx)
+  // const resp = await fetch(`http://localhost:3000/api/activate/user/${ctx.hash}`)
+  // const res = await resp.json()
+  // console.log("sd-->", res)
+  const handler = nextConnect()
+  handler.use(database)
+  handler.get(async(req:Document, res) => {
+    const user =  await req.db.collection("pending_consent_user").find().sort({_id: -1}).limit(1)
+    console.log("s--> ", user)
+  })
+  return {props: {res: "sd"}}
 }

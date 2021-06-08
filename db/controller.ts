@@ -4,9 +4,9 @@ import { sendConfirmationMail } from "./mailer";
 
 
 // create a new user collections and it's documents (Obviously)
-export const registerEmail = (email: string) => async(req: Document, res: any) => {
+export const registerEmail = async(req: any, res: any) => {
   console.log("****")
-  // const {email} = req.body;
+  const {email} = req.body;
   let existsUser = await req.db.collection("consent_user").findOne({email})
   if(existsUser) {return res.status(422).send("user is already registered")}
 
@@ -14,7 +14,7 @@ export const registerEmail = (email: string) => async(req: Document, res: any) =
   // console.log("new user --> ", newUser.ops[0])
   const user = newUser.ops[0]
   await sendConfirmationMail({toUser: user, hash: user._id})
-  return res.json({message: "you have been registered"})
+  return res.json({message: "you have been registered", user})
 
 }
 
@@ -28,7 +28,7 @@ export const activateUser = async(req: any, res: any) => {
     // res.json(data)
     await req.db.collection("consent_user").insertOne({...data, new: true})
     await req.db.collection("pending_consent_user").remove({_id: new ObjectId(hash)})
-    res.json({message: `User ${hash} has been activated`})
+    res.json({message: `User ${hash} has been activated`, data: hash})
   }catch{
     res.send("User cannot be activated!!")
   }

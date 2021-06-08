@@ -23,6 +23,20 @@ const EntryPage = (props?: InferGetStaticPropsType<typeof getStaticProps>) => {
       setEmailCheck(_ => false)
     }
   }
+
+  const onFormSubmit = async (e: any) => {
+    e.preventDefault();
+    const s = await fetch("http://localhost:3000/api/register",
+      { 
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({email})
+      })
+    console.log("from on formSubmit -->", s)
+  }
   console.log("(*** from res static props ---> ", props?.res)
   return (  
     <div> 
@@ -91,6 +105,7 @@ const EntryPage = (props?: InferGetStaticPropsType<typeof getStaticProps>) => {
             variant='contained'
             color = 'inherit' 
             disabled = {!emailCheck}
+            onClick={onFormSubmit}
             style ={{
               // display: 'flex',
               // flexDirection: 'row-reverse',
