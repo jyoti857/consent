@@ -8,7 +8,9 @@ export interface EntryPageProps {
   
 }
 
-const EntryPage = (props?: InferGetStaticPropsType<typeof getStaticProps>) => {
+const EntryPage = (
+  // props?: InferGetStaticPropsType<typeof getStaticProps>
+  ) => {
   const [email, setEmail] = React.useState("")
   const [emailCheck, setEmailCheck] = React.useState(false)
   console.log("email0---> ", email )
@@ -37,7 +39,6 @@ const EntryPage = (props?: InferGetStaticPropsType<typeof getStaticProps>) => {
       })
     console.log("from on formSubmit -->", s)
   }
-  console.log("(*** from res static props ---> ", props?.res)
   return (  
     <div> 
       {/* <AppBar>Consents</AppBar> */}
@@ -129,10 +130,10 @@ const EntryPage = (props?: InferGetStaticPropsType<typeof getStaticProps>) => {
 export default EntryPage;
 
 
-export const getStaticProps = async () => {
-  console.log("dksldkl")
-  const resp = await fetch("http://localhost:3000/api/movies")
-  const res = await resp.json()
-  console.log("sd-->", res)
-  return {props: {res}}
-}
+// export const getStaticProps = async () => {
+//   console.log("dksldkl")
+//   const resp = await fetch("http://localhost:3000/api/movies")
+//   const res = await resp.json()
+//   console.log("sd-->", res)
+//   return {props: {res}}
+// }

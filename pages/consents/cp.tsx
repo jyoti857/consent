@@ -19,7 +19,7 @@ let initialValues = {email: "enter your email", firstName: "John", lastName: "Do
 const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({token, new_user}: any) => {
   console.log("token --> ", token )
   const {email, name, state}=token
-  const [firstName, lastName] = name.split(" ")
+  const [firstName, lastName] = name ? name.split(" ") : ["", ""]
 
   const [firstName_, setFirstName_] = React.useState(firstName)
   const [lastName_, setLastName_] = React.useState(lastName)
@@ -277,9 +277,10 @@ export const getServerSideProps = async (ctx: any) => {
     const stringi = JSON.stringify(existing_user)
     const parse = JSON.parse(stringi)
     console.log("parse_existing user #--->", parse)
+    // ctx.query={}
     return {props:{token: {...parse}, new_user: false}}
   }
 
   // calling the activate user api 
-  return {props: {token: parse? parse: {}, new_user: false}}
+  return {props: {token: parse ? parse : {}, new_user: false}}
 }
