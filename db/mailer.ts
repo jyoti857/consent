@@ -23,7 +23,7 @@ export function sendMail(message: any){
 export function sendConfirmationMail({toUser, hash}: any){
   const message = {
     from: "jyotiranjan767@gmail.com",
-    to: "jyotiranjan857@gmail.com", 
+    to: toUser.email, //JSON.stringify(toUser.email),
     subject: "Consent - Activation Account", 
     html: `
       <style>
