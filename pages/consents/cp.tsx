@@ -11,23 +11,42 @@ import InputField from "../../componets/InputField";
 import {dbConnect} from '../../db/database';
 import { Db, ObjectId } from 'mongodb';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 export interface CommunicationPreferencesProps {
   
 }
-let initialValues = {email: "enter your email", firstName: "John", lastName: "Doe", state: 'DE'}
+let initialValues = {email: "", firstName: "", lastName: "", state: 'DE', type: "Other"}
 const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({token, new_user}: any) => {
-  console.log("token --> ", token )
-  const {email, name, state}=token
+  console.log("token --># ", token )
+  const {email, name, state, hcpType, consents}=token
+  const adcConsent = consents && consents.find((conse: any)=> conse.preference.type ==="UNBR")
+  const commConsent = consents && consents.find((conse: any)=> conse.preference.type ==="BRAN")
+  console.log("adcConsent --> ", adcConsent)
+  console.log("commConsent --> ", commConsent)
   const [firstName, lastName] = name ? name.split(" ") : ["", ""]
 
   const [firstName_, setFirstName_] = React.useState(firstName)
   const [lastName_, setLastName_] = React.useState(lastName)
   const [state_, setState_] = React.useState(state)
+  const [type_, setType_] = React.useState(hcpType)
+  const [adc, setAdc] = React.useState(adcConsent ? adcConsent.preference.subscribed ? "adc_sub": "adc_unsub" : '');
+  const [comm, setComm] = React.useState(commConsent ? commConsent.preference.subscribed ? "comm_sub": "comm_unsub" : '');
+  const handleAdcPreferences = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAdc(event.currentTarget.value);
+  };
+  const handleCommPreferences = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setComm(event.currentTarget.value);
+  };
+  const router = useRouter()
+  console.log("radio button value ---> ", adc, comm)
   const handleFormSubmit = async(e: any) => {
     e.preventDefault();
-    const data = {firstName: firstName_, lastName: lastName_, state: state_ || initialValues.state}
-    console.log("data --> ", data)
+    const data = {firstName: firstName_, lastName: lastName_, 
+      state: state_ || initialValues.state, type: type_ || initialValues.type,
+      adc, comm
+    }
+    console.log("data --> handle submit ", data,  )
     await fetch(`http://localhost:3000/api/activate/user/${token._id}`, 
       {
         method: "POST",
@@ -38,6 +57,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
         body: JSON.stringify(data)
       }
     )
+    // router.push('/consents/thanks')
   }
   return (  
     <div>
@@ -150,7 +170,8 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
           <Grid item md={6}>
             <InputField
               placeholder='Other'
-              // value ={initialValues.email}
+              value ={type_ || initialValues.type}
+              onChange = {e => setType_(e.target.value)}
               divStyle = {{display: 'flex', flexDirection: 'column', }}
               labelStyle = {{marginLeft: 21, marginBottom: 7}}
               label="Type"
@@ -206,14 +227,14 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
         <Divider style={{marginTop: -20}}/>
         <FormControl component="fieldset" style={{marginLeft: 20, marginTop: 12}}>
           <FormLabel style ={{color: "#686868"}}>ADC Therapeutics Corporate Email and News*</FormLabel>
-          <RadioGroup>
-            <FormControlLabel value="female" control={<Radio style={{color: "#00A7E1"}} />} label="Subscribe" />
-            <FormControlLabel value="male" control={<Radio style={{color: "#00A7E1"}}/>} label="Unsubscribe" />
+          <RadioGroup value={adc} onChange={handleAdcPreferences}>
+            <FormControlLabel value="adc_sub" control={<Radio style={{color: "#00A7E1"}} />} label="Subscribe" />
+            <FormControlLabel value="adc_unsub" control={<Radio style={{color: "#00A7E1"}}/>} label="Unsubscribe" />
           </RadioGroup>
           <FormLabel style ={{color: "#686868"}}>Communications from Sales and Marketing*</FormLabel>
-          <RadioGroup >
-            <FormControlLabel value="female" control={<Radio style={{color: "#00A7E1"}} />} label="Subscribe" />
-            <FormControlLabel value="male" control={<Radio style={{color: "#00A7E1"}}/>} label="Unsubscribe" />
+          <RadioGroup value={comm} onChange={handleCommPreferences}>
+            <FormControlLabel value="comm_sub" control={<Radio style={{color: "#00A7E1"}} />} label="Subscribe" />
+            <FormControlLabel value="comm_unsub" control={<Radio style={{color: "#00A7E1"}}/>} label="Unsubscribe" />
           </RadioGroup>
         </FormControl>
         </div>
@@ -224,9 +245,10 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
         </div>
         <CardActions>
           <Button 
+            className='btn btn-primary'
             size="small"
-            variant='contained'
-            color = 'inherit' 
+            // variant='contained'
+            // color = 'inherit' 
             disabled = {!true}
             onClick={handleFormSubmit}
             style ={{
@@ -278,7 +300,7 @@ export const getServerSideProps = async (ctx: any) => {
     const parse = JSON.parse(stringi)
     console.log("parse_existing user #--->", parse)
     // ctx.query={}
-    return {props:{token: {...parse}, new_user: false}}
+    return {props: {token: {...parse}, new_user: false}}
   }
 
   // calling the activate user api 
