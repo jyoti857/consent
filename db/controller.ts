@@ -128,9 +128,11 @@ export const activateUser = async(req: any, res: any) => {
       console.log("addConsDoc, commConsDoc --> ", addConsDoc, commConsDoc)
       // in progress
       await req.db.collection('consents').updateOne({preferenceId: adcId}, {$set:{"preference.subscribed": adc==="adc_sub"?true:false}})
-      await req.db.collection('consents').updqteOne({preferenceId: commId}, {$set:{"preference.subscribed": comm==="comm_sub"?true:false}})
-      const data_ = {...data, hcpType: type, consents: [{...addConsDoc, preference: {...addConsDoc.preference, subscribed: adc==="adc_sub"?true:false}},
-           {...commConsDoc, preference: {...commConsDoc.preference, subscribed: comm==="comm_sub"?true:false}}]}
+      await req.db.collection('consents').updateOne({preferenceId: commId}, {$set:{"preference.subscribed": comm==="comm_sub"?true:false}})
+      const data_ = {...data, hcpType: type, consents: [
+          {...addConsDoc, preference: {...addConsDoc.preference, subscribed: adc==="adc_sub"?true:false}},
+          {...commConsDoc, preference: {...commConsDoc.preference, subscribed: comm==="comm_sub"?true:false}}
+        ]}
       await req.db.collection('consent_user').updateOne({_id: data._id}, {$set: {...data_}})
       // return res.json({message: `User ${hash} is there in db before`, data: data})
     }
