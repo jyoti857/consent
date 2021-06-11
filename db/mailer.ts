@@ -5,8 +5,8 @@ export function sendMail(message: any){
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "jyotiranjan767@gmail.com",
-        pass: "9692928165"
+        user: "conexus1216@gmail.com",
+        pass: "jyoti@123"
       }
     })
 
@@ -22,7 +22,7 @@ export function sendMail(message: any){
 
 export function sendConfirmationMail({toUser, hash}: any){
   const message = {
-    from: "jyotiranjan767@gmail.com",
+    from: "conexus1216@gmail.com",
     to: toUser.email, //JSON.stringify(toUser.email),
     subject: "Consent - Activation Account", 
     html: `
