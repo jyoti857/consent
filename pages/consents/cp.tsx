@@ -57,7 +57,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
         body: JSON.stringify(data)
       }
     )
-    // router.push('/consents/thanks')
+    router.push('/consents/thanks')
   }
   return (  
     <div>

@@ -4,6 +4,8 @@ import { InferGetStaticPropsType } from "next";
 import Image from 'next/image'
 import React from "react";
 import InputField from "../../componets/InputField";
+import { useRouter } from 'next/router';
+
 export interface EntryPageProps {
   
 }
@@ -25,9 +27,10 @@ const EntryPage = (
       setEmailCheck(_ => false)
     }
   }
-
+  const router = useRouter()
   const onFormSubmit = async (e: any) => {
     e.preventDefault();
+    router.push('/consents/thanks')
     const s = await fetch("http://localhost:3000/api/register",
       { 
         method: "POST",
@@ -37,6 +40,7 @@ const EntryPage = (
         },
         body: JSON.stringify({email})
       })
+      //.then(() => router.push('/consents/thanks'))
     console.log("from on formSubmit -->", s)
   }
   return (  
