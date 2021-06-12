@@ -9,6 +9,17 @@ export interface ThanksProps {
 const Thanks: React.FC<ThanksProps> = () => {
   const [hover, setHover]=React.useState(false)
   const handleHover = () => setHover(prev => !prev)
+  
+  React.useEffect(() => {
+    window.location.hash = "no-back-button";
+    // Again because Google Chrome doesn't insert
+    // the first hash into the history
+    window.location.hash = "Again-No-back-button"; 
+
+    window.onhashchange = function(){
+        window.location.hash = "no-back-button";
+    }
+  }, [window.location])
   return ( 
     <div>
       <div style = {{display: 'flex', justifyContent: 'center', padding: 12}}>

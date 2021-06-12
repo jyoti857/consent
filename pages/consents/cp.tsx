@@ -25,6 +25,9 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
   console.log("adcConsent --> ", adcConsent)
   console.log("commConsent --> ", commConsent)
   const [firstName, lastName] = name ? name.split(" ") : ["", ""]
+  console.log("name, -->", name)
+  console.log("first name, -->", firstName)
+  console.log("last name, -->", lastName)
 
   const [firstName_, setFirstName_] = React.useState(firstName)
   const [lastName_, setLastName_] = React.useState(lastName)
