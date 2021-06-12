@@ -1,6 +1,5 @@
-import { link } from 'fs';
 import Image from 'next/image';
-import Link from 'next/Link'
+import Link from 'next/link'
 import React from 'react';
 
 export interface ThanksProps {

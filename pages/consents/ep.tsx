@@ -72,7 +72,7 @@ const EntryPage = (
             <div style ={{width: "35%"}}>
               <CardMedia 
                 // className={classes.media}
-                image="/adct_logo_small.png"
+                image="/hello.png"
                 style = {{width: 222, height: 90}}
                 title="adct consents"
               />

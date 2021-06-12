@@ -94,7 +94,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
             <div style ={{width: "35%"}}>
               <CardMedia 
                 // className={classes.media}
-                image="/adct_logo_small.png"
+                image="/hello.png"
                 style = {{width: 222, height: 90}}
                 title="Contemplative Reptile"
               />
