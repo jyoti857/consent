@@ -4,6 +4,7 @@ export function sendMail(message: any){
   return new Promise((res, rej) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      host: 'smtp.gmail.com',
       auth: {
         user: "conexus1216@gmail.com",
         pass: "jyoti@123"
