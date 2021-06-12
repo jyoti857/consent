@@ -41,7 +41,7 @@ export function sendConfirmationMail({toUser, hash}: any){
       <button class='btn btn-primary' onclick = "location.href='https://consent.vercel.app/consents/cp?token=${hash}';">
         Verify and Update Preferences
       </button>
-      <a class = 'btn btn-primary' target="_" href="http://https://consent.vercel.app/consents/cp?token=${hash}">Verify and update preferences</a>
+      <a class = 'btn btn-primary' target="_" href="http://consent.vercel.app/consents/cp?token=${hash}">Verify and update preferences</a>
       <p>Cheers</p>
       <p>Thank you,</p>
       <p>Consent Team</p>
