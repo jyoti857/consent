@@ -1,4 +1,4 @@
-
+import styles from '../styles/Home.module.css'
 
 export interface InputFieldProps {
   value?: any;
@@ -23,18 +23,8 @@ const InputField: React.FC<InputFieldProps> = ({onChange, value, placeholder, di
         value={value}
         placeholder={placeholder}
         disabled={disabled}
-        style = {{...inputStyle, 
-          borderWidth: 1,
-          borderRadius: 3,
-          height: 33,
-          outlineColor: 'grey',
-          fontFamily: "Poppins",
-          fontSize: 16,
-          margin: "2px 20px",
-          padding: 12,
-          color: 'grey',
-          fontWeight: '600'
-        }}
+        style = {{...inputStyle}}
+        className={styles.input_c}
       />
     </div>
    );

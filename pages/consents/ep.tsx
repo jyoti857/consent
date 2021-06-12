@@ -1,10 +1,9 @@
 import {  AppBar, makeStyles } from "@material-ui/core";
 import { CardMedia, Card, CardActions, CardContent, Button, Typography, TextField} from '@material-ui/core'
-import { InferGetStaticPropsType } from "next";
-import Image from 'next/image'
 import React from "react";
 import InputField from "../../componets/InputField";
 import { useRouter } from 'next/router';
+import styles from '../../styles/Home.module.css'
 
 export interface EntryPageProps {
   
@@ -15,7 +14,6 @@ const EntryPage = (
   ) => {
   const [email, setEmail] = React.useState("")
   const [emailCheck, setEmailCheck] = React.useState(false)
-  console.log("email0---> ", email )
   const handleChange = (e: any) => {
     e.preventDefault();
     setEmail(e.target.value)
@@ -40,11 +38,9 @@ const EntryPage = (
         },
         body: JSON.stringify({email})
       })
-      //.then(() => router.push('/consents/thanks'))
-    console.log("from on formSubmit -->", s)
   }
   return (  
-    <div> 
+    <div className = {styles.main}> 
       {/* <AppBar>Consents</AppBar> */}
       <Card style= {{width: 730, margin: '40px auto', position: 'relative', paddingBottom: 32,}}>
         <CardContent>
@@ -78,7 +74,7 @@ const EntryPage = (
                 // className={classes.media}
                 image="/adct_logo_small.png"
                 style = {{width: 222, height: 90}}
-                title="Contemplative Reptile"
+                title="adct consents"
               />
             </div>
           </div>
@@ -88,20 +84,8 @@ const EntryPage = (
           value ={email}
           onChange={handleChange}
           divStyle = {{display: 'flex', flexDirection: 'column', }}
-          labelStyle = {{marginLeft: 21, marginBottom: 7}}
+          labelStyle = {{marginLeft: 20, marginBottom: 7}}
           label="Email*"
-          inputStyle={{
-            borderWidth: 1,
-            borderRadius: 3,
-            width: "94%",
-            height: 33,
-            // lineHeight: 1.5, 
-            // letterSpacing: 1.2,
-            outlineColor: 'grey',
-            fontFamily: "sans-serif",
-            fontSize: 16,
-            margin: "2px 20px",
-          }}
         />
         
         <CardActions>
@@ -112,10 +96,6 @@ const EntryPage = (
             disabled = {!emailCheck}
             onClick={onFormSubmit}
             style ={{
-              // display: 'flex',
-              // flexDirection: 'row-reverse',
-              // width: "100%",
-              // alignSelf: "flex-end",
               position: 'absolute',
               bottom: 10,
               right: 10,

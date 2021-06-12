@@ -40,6 +40,10 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
   };
   const router = useRouter()
   console.log("radio button value ---> ", adc, comm)
+
+  React.useEffect(() => {
+    if(!email){router.push('/')}
+  }, [])
   const handleFormSubmit = async(e: any) => {
     e.preventDefault();
     const data = {firstName: firstName_, lastName: lastName_, 
@@ -108,16 +112,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
               label="Name*"
               disabled={!new_user}
               inputStyle={{
-                borderWidth: 1,
-                borderRadius: 3,
                 width: "98%",
-                height: 33,
-                // lineHeight: 1.5, 
-                // letterSpacing: 1.2,
-                outlineColor: 'grey',
-                fontFamily: "sans-serif",
-                fontSize: 16,
-                margin: "2px 20px",
               }}
             />
           </Grid>
@@ -131,16 +126,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
               label= "*"
               disabled={!new_user}
               inputStyle={{
-                borderWidth: 1,
-                borderRadius: 3,
                 width: "92%",
-                height: 33,
-                // lineHeight: 1.5, 
-                // letterSpacing: 1.2,
-                outlineColor: 'grey',
-                fontFamily: "sans-serif",
-                fontSize: 16,
-                margin: "2px 20px",
               }}
             />
           </Grid>
@@ -154,16 +140,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
               label="State*"
               disabled={!new_user}
               inputStyle={{
-                borderWidth: 1,
-                borderRadius: 3,
                 width: "98%",
-                height: 33,
-                // lineHeight: 1.5, 
-                // letterSpacing: 1.2,
-                outlineColor: 'grey',
-                fontFamily: "sans-serif",
-                fontSize: 16,
-                margin: "2px 20px",
               }}
             />
           </Grid>
@@ -176,16 +153,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
               labelStyle = {{marginLeft: 21, marginBottom: 7}}
               label="Type"
               inputStyle={{
-                borderWidth: 1,
-                borderRadius: 3,
                 width: "92%",
-                height: 33,
-                // lineHeight: 1.5, 
-                // letterSpacing: 1.2,
-                outlineColor: 'grey',
-                fontFamily: "sans-serif",
-                fontSize: 16,
-                margin: "2px 20px",
               }}
             />
           </Grid>
@@ -198,16 +166,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
               label="Email*"
               disabled={true}
               inputStyle={{
-                borderWidth: 1,
-                borderRadius: 3,
                 width: "96%",
-                height: 33,
-                // lineHeight: 1.5, 
-                // letterSpacing: 1.2,
-                outlineColor: 'grey',
-                fontFamily: "sans-serif",
-                fontSize: 16,
-                margin: "2px 20px",
               }}
             />
           </Grid>
@@ -245,22 +204,16 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
         </div>
         <CardActions>
           <Button 
-            className='btn btn-primary'
             size="small"
-            // variant='contained'
-            // color = 'inherit' 
-            disabled = {!true}
+            variant='contained'
+            disabled = {email ? false: true}
             onClick={handleFormSubmit}
             style ={{
-              // display: 'flex',
-              // flexDirection: 'row-reverse',
-              // width: "100%",
-              // alignSelf: "flex-end",
               position: 'absolute',
               bottom: 10,
               right: 10,
               color: 'white',
-              backgroundColor: false ?'#00A7E1' : '#c2c2c2',
+              backgroundColor: email ?'#00A7E1' : '#c2c2c2',
               cursor: 'pointer',
               textTransform: "capitalize",
               fontFamily: "sans-serif"
@@ -276,9 +229,6 @@ export default CommunicationPreferences;
 export const getServerSideProps = async (ctx: any) => {
   console.log("dksldkl", ctx.query)
   const id = ctx.query.token
-  // const resp = await fetch(`http://localhost:3000/api/activate/user/${ctx.hash}`)
-  // const res = await resp.json()
-  // console.log("sd-->", res)
 
   const d = await (await dbConnect()).collection('pending_consent_user').findOne({_id: new ObjectId(ctx.query.token)})
   console.log("d --->", d)
@@ -287,11 +237,6 @@ export const getServerSideProps = async (ctx: any) => {
   if(parse && parse._id){
     const existing_user = await (await dbConnect()).collection('consent_user').findOne({_id: new ObjectId(parse._id)})
     console.log("stringi, parse ---> ", stringi, parse, existing_user)
-    // if(!existing_user || id ){
-    //   const stringi = JSON.stringify(existing_user)
-    //   const parse = JSON.parse(stringi)
-    //   console.log("parse_existing user inside  --->", parse)
-    // }
     return {props:{token: {...parse}, new_user: true}}
   }
   const existing_user = await (await dbConnect()).collection('consent_user').findOne({_id: new ObjectId(ctx.query.token)})
@@ -299,7 +244,6 @@ export const getServerSideProps = async (ctx: any) => {
     const stringi = JSON.stringify(existing_user)
     const parse = JSON.parse(stringi)
     console.log("parse_existing user #--->", parse)
-    // ctx.query={}
     return {props: {token: {...parse}, new_user: false}}
   }
 
