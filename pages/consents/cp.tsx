@@ -231,7 +231,7 @@ export default CommunicationPreferences;
 
 export const getServerSideProps = async (ctx: any) => {
   console.log("dksldkl", ctx.query)
-  const id = ctx.query.token
+  // const id = ctx.query.token
 
   const d = await (await dbConnect()).collection('pending_consent_user').findOne({_id: new ObjectId(ctx.query.token)})
   console.log("d --->", d)
@@ -250,6 +250,6 @@ export const getServerSideProps = async (ctx: any) => {
     return {props: {token: {...parse}, new_user: false}}
   }
 
-  // calling the activate user api 
+  // calling the activate user api, most probably this line will never get called 
   return {props: {token: parse ? parse : {}, new_user: false}}
 }
