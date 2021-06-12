@@ -51,7 +51,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({toke
       adc, comm
     }
     console.log("data --> handle submit ", data,  )
-    await fetch(`http://localhost:3000/api/activate/user/${token._id}`, 
+    await fetch(`https://consent.vercel.app/api/activate/user/${token._id}`, 
       {
         method: "POST",
         headers: {
