@@ -16,7 +16,7 @@ const Thanks: React.FC<ThanksProps> = () => {
         window.location.hash = 'no-back-button'
       }
     }
-  }, [window.location])
+  }, [window])
 
   return (
     <div>
