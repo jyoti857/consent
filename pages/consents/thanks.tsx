@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 
 export interface ThanksProps { }
+global.window;
 
 const Thanks: React.FC<ThanksProps> = () => {
   const [hover, setHover] = React.useState(false)
