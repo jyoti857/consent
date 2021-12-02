@@ -4,10 +4,12 @@ export function sendMail(message: any){
   return new Promise((res, rej) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      host: 'smtp.gmail.com',
+      // host: 'smtp.gmail.com',
       auth: {
-        user: "conexus1216@gmail.com",
-        pass: "jyoti@123"
+        // user: "conexus1216@gmail.com",
+        // pass: "jyoti@123",
+        user: process.env.email,
+        pass: process.env.password
       }
     })
 
@@ -23,7 +25,7 @@ export function sendMail(message: any){
 
 export function sendConfirmationMail({toUser, hash}: any){
   const message = {
-    from: "conexus1216@gmail.com",
+    from: "conexus1218@gmail.com",
     to: toUser.email, //JSON.stringify(toUser.email),
     subject: "Consent - Activation Account", 
     html: `
@@ -41,7 +43,7 @@ export function sendConfirmationMail({toUser, hash}: any){
       <button class='btn btn-primary' onclick = "location.href='https://consent.vercel.app/consents/cp?token=${hash}';">
         Verify and Update Preferences
       </button>
-      <a class = 'btn btn-primary' target="_" href="http://consent.vercel.app/consents/cp?token=${hash}">Verify and update preferences</a>
+      <a class = 'btn btn-primary' target="_" href="https://consent.vercel.app/consents/cp?token=${hash}">Verify and update preferences</a>
       <p>Cheers</p>
       <p>Thank you,</p>
       <p>Consent Team</p>
