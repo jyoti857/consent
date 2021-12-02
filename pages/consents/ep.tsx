@@ -29,8 +29,8 @@ const EntryPage = (
   const onFormSubmit = async (e: any) => {
     e.preventDefault();
     router.push('/consents/thanks')
-    // const s = await fetch("https://consent.vercel.app/api/register",
-    const s = await fetch("http://localhost:3000/api/register",
+    const s = await fetch("https://consent.vercel.app/api/register",
+    // const s = await fetch("http://localhost:3000/api/register",
       { 
         method: "POST",
         headers: {
