@@ -9,14 +9,12 @@ const Thanks: React.FC<ThanksProps> = () => {
   const [hover, setHover] = React.useState(false)
   const handleHover = () => setHover((prev) => !prev)
   useEffect(() => {
-    if (window !== 'undefined') {
+    window.location.hash = 'no-back-button'
+    window.location.hash = 'Again-No-back-button'
+    window.onhashchange = function () {
       window.location.hash = 'no-back-button'
-      window.location.hash = 'Again-No-back-button'
-      window.onhashchange = function () {
-        window.location.hash = 'no-back-button'
-      }
     }
-  }, [window])
+  }, [])
 
   return (
     <div>
